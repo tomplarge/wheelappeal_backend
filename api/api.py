@@ -14,7 +14,7 @@ class Menu(Resource):
 
     def get(self):
         trucks = get_trucks()
-        return trucks
+        return jsonify(trucks)
 
 base_endpoint = "/v1"
 menu_endpoint = '/'.join((base_endpoint, "menu"))

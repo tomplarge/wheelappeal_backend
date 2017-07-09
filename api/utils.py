@@ -1,5 +1,4 @@
 import pymysql
-import json
 
 # returns truck menu from mysql as JSON
 def get_truck_menu(truck_name):
