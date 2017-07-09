@@ -1,28 +1,13 @@
-WheelAppeal
+WheelAppeal - Back End
 ===================
 This repository contains the code for the WheelAppeal mobile app, REST api, and website. This document will explain the usage of each component. First, clone the repository:
 
 ```
-git clone https://github.com/tomplarge/wheelappeal.git
+git clone https://github.com/tomplarge/wheelappeal_backend.git
 ```
 ----------
 
-
-Mobile App
--------------
-You must have the following requirements:
-- Xcode (latest version)
-- React Native (see 'Building Projects with Native Code' at <href> <href> https://facebook.github.io/react-native/docs/getting-started.html </href>)
-
-To run, do the following:
-```
-cd wheelappeal/mobile_app
-react-native run-ios
-```
-
-This should start up a terminal window for the JS development server and an iPhone simulator containing the mobile app.
-
-REST API -- OBSOLETE
+REST API -- In the process of relocation 
 ----------
 The REST Api is used for querying our MySQL database for food truck data. Currently, the API can be reached by a GET request at the following address:
 ```
