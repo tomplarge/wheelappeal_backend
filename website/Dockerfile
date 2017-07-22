@@ -11,4 +11,4 @@ RUN pip install --upgrade pip
 
 RUN pip install gunicorn django
 EXPOSE 8000
-CMD ["sh","-c"," gunicorn website.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh","-c"," nohup  gunicorn website.wsgi:application --bind 0.0.0.0:8000"]
