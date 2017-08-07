@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+
+<style>
+/* Body and Title Styles*/
+body {
+  background-color:#00d38e;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+.title {
+  color: white;
+  text-align: center;
+}
+h1 {
+  color: white;
+  font-size:60px;
+  font-style: bold;
+}
+p {
+  color: white;
+  font-style: italic;
+  font-size: 30px;
+}
+
+/* Form Styles */
+.form-container {
+  background-color: transparent;
+  width: 450px;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+.form-style textarea {
+  font-size: 30px;
+  padding-bottom: 20px;
+}
+.form-style input[type=text] {
+  font-size: 30px;
+  text-align: left;
+  padding-top: 40px;
+  margin:auto;
+  background: #00d38e;
+  border: none;
+  border-bottom: 1px solid white;
+  width: 100%;
+  outline: none;
+}
+.form-style input[type=text]::placeholder {
+  font-size: 30px;
+  color: white;
+  opacity: 0.5;
+  background-color: inherit;
+  left: 0px;
+}
+.form-style span {
+  font-weight: bold;
+  padding-top: 20px;
+  width: 100%;
+  font-size: 40px;
+  color:  white;
+  display: inline-block;
+  text-align: center;
+  align-self: center;
+  margin: auto;
+}
+.form-style input[type=submit] {
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  color: #00d38e;
+  font-size: 20px;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+
+}
+.form-style input[type=submit]:hover {
+  margin:auto;
+  display: block;
+  margin-top: 20px;
+  color: #00d38e;
+  background-color: #1c9963;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+}
+.form-style input[type=submit]:focus {
+  outline: none;
+}
+.form-style input[type=text]:-webkit-autofill {
+  /* Gets rid of yellow background on autofill */
+  -webkit-box-shadow: 0 0 0 1000px #00d38e inset !important;
+}
+.form-style input[name=menu-item] {
+  width: 60%;
+  float: left;
+}
+.form-style input[name=menu-price] {
+  width: 20%;
+  float: right;
+}
+.form-style label[for=menu-price] {
+  font-size: 30px;
+  font-weight: 300;
+  position: absolute;
+  bottom: 0;
+  right: 22%;
+  color: white;
+}
+.add-button {
+  text-align: center;
+  color: #00d38e;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 3px;
+  background-color: white;
+  margin-top: 15px;
+  border: none;
+}
+.add-button:focus{
+  outline: none;
+}
+.add-button:hover{
+  background-color: #1c9963;
+}
+.menu-item {
+  flex-direction: row;
+  display: inline-block;
+  position: relative;
+}
+
+</style>
+
+</head>
+<script>
+function addMenuItem() {
+  var item = document.createElement('div');
+  item.className = 'menu-item';
+  var nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.name = 'menu-item';
+  nameInput.required = 'true';
+  nameInput.placeholder = 'Item';
+  var priceLabel = document.createElement('label');
+  priceLabel.htmlFor = 'menu-price';
+  priceLabel.innerHTML = '$'
+  var priceInput = document.createElement('input');
+  priceInput.type = 'text';
+  priceInput.name = 'menu-price';
+  priceInput.required = 'true';
+  priceInput.placeholder = 'Price';
+  item.appendChild(nameInput)
+  item.appendChild(priceLabel)
+  item.appendChild(priceInput)
+  console.log(item)
+  var menuContainer = document.getElementsByClassName("menu-container")[0]
+  console.log(menuContainer)
+  menuContainer.appendChild(item);
+}
+</script>
+<body>
+  <div class="title">
+   <h1>Wheelappeal</h1>
+   <p>Submit your information</p>
+  </div>
+  <div class="form-container">
+    <form class = "form-style" method="post" autocomplete="false">
+      <input type="text" name="truck-name" required="true" placeholder="Truck Name"/>
+      <input type="text" name="cuisine" required="true" placeholder="Cuisine"/>
+      <span>Menu</span>
+      <div class="menu-container">
+        <div class="menu-item">
+          <input type="text" name="menu-item" required="true" placeholder="Item"/>
+          <label for="menu-price">$</label><input type="text" name="menu-price" required="true" placeholder="Price"/>
+        </div>
+      </div>
+      <button type="button" class="add-button" onclick="addMenuItem()">Add</button>
+      <input type="submit" value="Submit"/>
+    </form>
+  </div>
+</body>
+</html>
