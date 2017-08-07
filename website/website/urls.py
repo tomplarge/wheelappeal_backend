@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('wheelappeal.urls')),
-    #url(r'^wheelappeal/', include('wheelappeal.urls')),
     url(r'^api/', include('wheelappeal.urls')),
+    url(r'^submit/', include('wheelappeal.urls')),
     url(r'^admin/', admin.site.urls),
 ]
