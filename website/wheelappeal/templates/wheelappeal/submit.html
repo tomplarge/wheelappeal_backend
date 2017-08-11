@@ -171,9 +171,11 @@ function addMenuItem() {
    <p>Submit your information</p>
   </div>
   <div class="form-container">
-    <form class = "form-style" method="post" autocomplete="false">
-      <input type="text" name="truck-name" required="true" placeholder="Truck Name"/>
-      <input type="text" name="cuisine" required="true" placeholder="Cuisine"/>
+    <form class = "form-style" action="/submit/" method="post" autocomplete="false">
+      {{form.truck_name}}
+      <!-- <input type="text" name="truck-name" required="true" placeholder="Truck Name"/> -->
+      {{form.cuisine}}
+      <!-- <input type="text" name="cuisine" required="true" placeholder="Cuisine"/> -->
       <span>Menu</span>
       <div class="menu-container">
         <div class="menu-item">
