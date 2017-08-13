@@ -14,6 +14,9 @@ def get_menu(truck_name):
         menu_dict = cursor.fetchall()
         return menu_dict
 
+def submit_truck():
+    return
+    
 # returns the info of all trucks as JSON
 def get_trucks():
 

@@ -97,15 +97,15 @@ p {
   /* Gets rid of yellow background on autofill */
   -webkit-box-shadow: 0 0 0 1000px #00d38e inset !important;
 }
-.form-style input[name=menu-item] {
+.form-style input[class=item-name] {
   width: 60%;
   float: left;
 }
-.form-style input[name=menu-price] {
+.form-style input[class=item-price] {
   width: 20%;
   float: right;
 }
-.form-style label[for=menu-price] {
+.form-style label[for=item-price] {
   font-size: 30px;
   font-weight: 300;
   position: absolute;
@@ -113,79 +113,92 @@ p {
   right: 22%;
   color: white;
 }
-.add-button {
+.form-style a[class=add-row] {
   text-align: center;
   color: #00d38e;
-  width: 80px;
+  width: 40px;
   height: 30px;
   line-height: 30px;
   border-radius: 3px;
   background-color: white;
-  margin-top: 15px;
   border: none;
+  text-decoration: none;
+  position: absolute;
 }
-.add-button:focus{
+.form-style a[class=add-row]:focus{
   outline: none;
+  text-decoration: none;
 }
-.add-button:hover{
+.form-style a[class=add-row]:hover{
   background-color: #1c9963;
+  text-decoration: none;
 }
 .menu-item {
   flex-direction: row;
   display: inline-block;
   position: relative;
 }
-
+.menu-formset{
+  position: relative;
+}
+.menu-formset a[class=delete-row]{
+  text-align: center;
+  color: #ffffff;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+  border: none;
+  text-decoration: none;
+  left: 40px;
+}
+.menu-formset a[class=delete-row]:hover{
+  background-color: #1c9963;
+  text-decoration: none;
+}
+.menu-formset a[class=delete-row]:focus{
+  outline: none;
+  text-decoration: none;
+}
 </style>
 
 </head>
-<script>
-function addMenuItem() {
-  var item = document.createElement('div');
-  item.className = 'menu-item';
-  var nameInput = document.createElement('input');
-  nameInput.type = 'text';
-  nameInput.name = 'menu-item';
-  nameInput.required = 'true';
-  nameInput.placeholder = 'Item';
-  var priceLabel = document.createElement('label');
-  priceLabel.htmlFor = 'menu-price';
-  priceLabel.innerHTML = '$'
-  var priceInput = document.createElement('input');
-  priceInput.type = 'text';
-  priceInput.name = 'menu-price';
-  priceInput.required = 'true';
-  priceInput.placeholder = 'Price';
-  item.appendChild(nameInput)
-  item.appendChild(priceLabel)
-  item.appendChild(priceInput)
-  console.log(item)
-  var menuContainer = document.getElementsByClassName("menu-container")[0]
-  console.log(menuContainer)
-  menuContainer.appendChild(item);
-}
-</script>
 <body>
+  {% load staticfiles %}
+
   <div class="title">
    <h1>Wheelappeal</h1>
    <p>Submit your information</p>
   </div>
   <div class="form-container">
     <form class = "form-style" action="/submit/" method="post" autocomplete="false">
-      {{form.truck_name}}
-      <!-- <input type="text" name="truck-name" required="true" placeholder="Truck Name"/> -->
-      {{form.cuisine}}
-      <!-- <input type="text" name="cuisine" required="true" placeholder="Cuisine"/> -->
+      {% csrf_token %}
+      {{truck_form.truck_name}}
+      {{truck_form.cuisine}}
       <span>Menu</span>
-      <div class="menu-container">
+      {{ menu_formset.management_form }}
+      <div class="menu-formset">
+
+      {% for item_form in menu_formset %}
         <div class="menu-item">
-          <input type="text" name="menu-item" required="true" placeholder="Item"/>
-          <label for="menu-price">$</label><input type="text" name="menu-price" required="true" placeholder="Price"/>
+          {{ item_form.item_name }}
+          <label for="item-price">$</label>
+          {{ item_form.item_price }}
         </div>
+      {% endfor %}
+
       </div>
-      <button type="button" class="add-button" onclick="addMenuItem()">Add</button>
+      <!-- <button type="button" class="add-button" onclick="addMenuItem()">Add</button> -->
       <input type="submit" value="Submit"/>
     </form>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static '/admin/js/jquery.formset.js' %}"></script>
+    <script>
+      $('.menu-formset').formset({
+          addText: 'Add',
+          deleteText: 'Remove'
+        });
+  </script>
   </div>
 </body>
 </html>

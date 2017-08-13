@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib import messages
+from django.shortcuts import render, render_to_response, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from django.forms.formsets import formset_factory
+from .forms import TruckForm, BaseMenuFormSet, MenuForm
 
-from .forms import TruckForm
+import utils
 
 def index(request):
     context = {}
@@ -14,25 +17,71 @@ def index(request):
 def api(request):
     return HttpResponse('This is our API. It is currently under construction.')
 
+# def submit(request):
+#     # if this is a POST request we need to process the form data
+#     if request.method == 'POST':
+#         form = TruckForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             print form
+#             return HttpResponseRedirect('/')
+#
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         form = TruckForm()
+#
+#     return render(request, 'wheelappeal/submit.html', {'form': form})
+
 def submit(request):
-    # if this is a POST request we need to process the form data
+    """
+    Allows a user to update their own profile.
+    """
+    # Create the formset, specifying the form and formset we want to use.
+    MenuFormSet = formset_factory(MenuForm, formset=BaseMenuFormSet)
+
     if request.method == 'POST':
-        # get the menu items that were added
-        menu = get_menu(request)
-        # create a form instance and populate it with data from the request:
-        form = TruckForm(request.POST, menu=menu)
-        # check whether it's valid:
-        if form.is_valid():
-            for unknown in form.:
-                save_answer(request, question, answer)
-            print "Form is good!"
-            return HttpResponseRedirect('/')
+        print "Posting"
+        truck_form = TruckForm(request.POST)
+        menu_formset = MenuFormSet(request.POST)
 
-    # if a GET (or any other method) we'll create a blank form
+        if truck_form.is_valid() and menu_formset.is_valid():
+            print "Form valid"
+            truck_name = truck_form.cleaned_data.get('truck_name')
+            cuisine = truck_form.cleaned_data.get('cuisine')
+            menu_items = []
+
+            for menu_form in menu_formset:
+                item_name = menu_form.cleaned_data.get('item_name')
+                item_price = menu_form.cleaned_data.get('item_price')
+
+                if item_name and item_price:
+                    menu_items.append({'name':item_name, 'price':item_price})
+
+            # try:
+            #     with transaction.atomic():
+            #         #Replace the old with the new
+            #         UserLink.objects.filter(user=user).delete()
+            #         UserLink.objects.bulk_create(new_links)
+            #
+            #         # And notify our users that it worked
+            #         messages.success(request, 'You have submitted your information.')
+
+            # except IntegrityError: #If the transaction failed
+            #     messages.error(request, 'There was an error saving your profile.')
+            #     return redirect(reverse('profile-settings'))
+            truck_data = {'name':truck_name, 'cuisine':cuisine, 'menu': menu_items}
+            response = utils.post_truck_data(truck_data)
+            if response:
+                return HttpResponse('Successful Post')
+            else:
+                return HttpResponse("ERROR!")
     else:
-        form = TruckForm()
+        truck_form = TruckForm()
+        menu_formset = MenuFormSet()
 
-    return render(request, 'wheelappeal/submit.html', {'form': form})
+    context = {
+        'truck_form': truck_form,
+        'menu_formset': menu_formset,
+    }
 
-def get_menu(request):
-    return
+    return render(request, 'wheelappeal/submit.html', context)
