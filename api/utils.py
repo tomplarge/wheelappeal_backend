@@ -1,12 +1,16 @@
 import pymysql, json
 
+def get_auth():
+    auth = json.load(open("/home/ec2-user/db_auth.json"))
+    return auth
+
 # returns truck menu from mysql as JSON
 def get_menu(truck_name):
-
+    auth = get_auth()
     try:
-        connection = pymysql.connect( )
+        connection = pymysql.connect(host=auth['host'],user=auth['user'],passwd=auth['passwd'],db=auth['db'])
     except:
-        raise Exception('Incorrect Info')
+        raise Exception('Incorrect Database Authentication')
 
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
         sql = "SELECT * FROM " + truck_name
@@ -14,16 +18,35 @@ def get_menu(truck_name):
         menu_dict = cursor.fetchall()
         return menu_dict
 
-def submit_truck():
-    return
-    
+# submit truck data from JSON
+#TODO: update table if it already exists
+#TODO: don't make price int - this is on the DB side
+def submit_truck(truck_data):
+    auth = get_auth()
+    try:
+        connection = pymysql.connect(host=auth['host'],user=auth['user'],passwd=auth['passwd'],db=auth['db'])
+    except:
+        raise Exception('Incorrect Database Authentication')
+
+    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+        truck_name = truck_data['truck_name']
+        cuisine = truck_data['cuisine']
+        sql = 'INSERT INTO trucks (name, cuisine) VALUES ("%s", "%s")' % (truck_name, cuisine)
+        cursor.execute(sql)
+        sql = "CREATE TABLE %s (item varchar(30), price int(11))" % (truck_name)
+        cursor.execute(sql)
+        menu = truck_data['menu']
+        for item in menu:
+            sql = 'INSERT INTO %s (item, cuisine) VALUES ("%s", "%d")' % (truck_name, item['name'], item['price'])
+            cursor.execute(sql)
+
 # returns the info of all trucks as JSON
 def get_trucks():
-
+    auth = get_auth()
     try:
-        connection = pymysql.connect( )
+        connection = pymysql.connect(host=auth['host'],user=auth['user'],passwd=auth['passwd'],db=auth['db'])
     except:
-        raise Exception('Incorrect Info')
+        raise Exception('Incorrect Database Authentication')
 
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
         sql = "SELECT * FROM trucks"

@@ -74,7 +74,7 @@ def submit(request):
             if response:
                 return HttpResponse('Successful Post')
             else:
-                return HttpResponse("ERROR!")
+                return HttpResponse("ERROR!!" + response.text)
     else:
         truck_form = TruckForm()
         menu_formset = MenuFormSet()
