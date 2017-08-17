@@ -1,0 +1,2 @@
+#!/bin/bash
+mysql -h wheelappeal.ccl05r12jihu.us-east-2.rds.amazonaws.com -P 3306 -u tomplarge -p
