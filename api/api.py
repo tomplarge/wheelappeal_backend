@@ -33,8 +33,8 @@ class Submit(Resource):
     def post(self):
         request_json = request.get_json()
         if request_json != None:
-            print request_json
-            sys.__stdout__.flush()
+            print 'request:',request_json
+            utils.submit_truck(request_json)
         else:
             return 'Incorrect request formatting. Must be JSON.'
 

@@ -69,7 +69,7 @@ def submit(request):
             # except IntegrityError: #If the transaction failed
             #     messages.error(request, 'There was an error saving your profile.')
             #     return redirect(reverse('profile-settings'))
-            truck_data = {'name':truck_name, 'cuisine':cuisine, 'menu': menu_items}
+            truck_data = {'truck_name':truck_name, 'cuisine':cuisine, 'menu': menu_items}
             response = utils.post_truck_data(truck_data)
             if response:
                 return HttpResponse('Successful Post')

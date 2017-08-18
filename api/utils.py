@@ -1,4 +1,5 @@
 import pymysql, json
+import sys, os
 
 def get_auth():
     auth = json.load(open("/home/ec2-user/db_auth.json"))
@@ -8,7 +9,7 @@ def get_auth():
 def get_menu(truck_name):
     auth = get_auth()
     try:
-        connection = pymysql.connect(host=auth['host'],user=auth['user'],passwd=auth['passwd'],db=auth['db'])
+        connection = pymysql.connect(host=str(auth['host']),user=str(auth['user']),passwd=str(auth['passwd']),db=str(auth['db']))
     except:
         raise Exception('Incorrect Database Authentication')
 
@@ -29,6 +30,7 @@ def submit_truck(truck_data):
         raise Exception('Incorrect Database Authentication')
 
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+        print 'truck_data:',truck_data
         truck_name = truck_data['truck_name']
         cuisine = truck_data['cuisine']
         sql = 'INSERT INTO trucks (name, cuisine) VALUES ("%s", "%s")' % (truck_name, cuisine)
@@ -37,8 +39,13 @@ def submit_truck(truck_data):
         cursor.execute(sql)
         menu = truck_data['menu']
         for item in menu:
-            sql = 'INSERT INTO %s (item, cuisine) VALUES ("%s", "%d")' % (truck_name, item['name'], item['price'])
+            print 'item:',item
+            sql = 'INSERT INTO %s (item, price) VALUES ("%s", "%d")' % (truck_name, item['name'], int(item['price']))
+            print sql
             cursor.execute(sql)
+            print "executed"
+            sys.__stdout__.flush()
+            connection.commit()
 
 # returns the info of all trucks as JSON
 def get_trucks():
