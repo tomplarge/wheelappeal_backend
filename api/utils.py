@@ -41,7 +41,7 @@ def submit_truck(truck_data):
         logging.debug("Executing %s" % (sql))
         cursor.execute(sql)
         sql = 'CREATE TABLE "%s" (item varchar(30), price int(11))' % (truck_name)
-        logging.debug("Executing %s % (sql))
+        logging.debug("Executing %s" % (sql))
         cursor.execute(sql)
         menu = truck_data['menu']
         for item in menu:
