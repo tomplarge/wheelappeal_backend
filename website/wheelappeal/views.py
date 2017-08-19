@@ -8,7 +8,11 @@ from django.template import loader
 from django.forms.formsets import formset_factory
 from .forms import TruckForm, BaseMenuFormSet, MenuForm
 
+import logging
 import utils
+
+# set up logging
+logging.basicConfig(filename='/home/ec2-user/website.log',level=logging.DEBUG,format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
 
 def index(request):
     context = {}
@@ -40,14 +44,14 @@ def submit(request):
     MenuFormSet = formset_factory(MenuForm, formset=BaseMenuFormSet)
 
     if request.method == 'POST':
-        print "Posting"
         truck_form = TruckForm(request.POST)
         menu_formset = MenuFormSet(request.POST)
 
         if truck_form.is_valid() and menu_formset.is_valid():
-            print "Form valid"
+            logging.debug("Menu and truck forms are valid")
             truck_name = truck_form.cleaned_data.get('truck_name')
             cuisine = truck_form.cleaned_data.get('cuisine')
+            logging.debug("Submit request: %s, %s" % (truck_name, cuisine))
             menu_items = []
 
             for menu_form in menu_formset:
@@ -56,7 +60,9 @@ def submit(request):
 
                 if item_name and item_price:
                     menu_items.append({'name':item_name, 'price':item_price})
-
+                else:
+                    logging.debug("Missing menu fields for %s: %s, %s," % (truck_name, item_name, item_price))
+                    return HttpResponse("It looks like you missed a field in the menu!")
             # try:
             #     with transaction.atomic():
             #         #Replace the old with the new
@@ -74,7 +80,8 @@ def submit(request):
             if response:
                 return HttpResponse('Successful Post')
             else:
-                return HttpResponse("ERROR!!" + response.text)
+                logging.debug("Error in truck submission: %s" % (response))
+                return HttpResponse("ERROR!! " + response.text)
     else:
         truck_form = TruckForm()
         menu_formset = MenuFormSet()
@@ -83,5 +90,5 @@ def submit(request):
         'truck_form': truck_form,
         'menu_formset': menu_formset,
     }
-
+    
     return render(request, 'wheelappeal/submit.html', context)
