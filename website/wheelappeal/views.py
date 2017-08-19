@@ -44,7 +44,7 @@ def submit(request):
                 if 'item_name' in menu_form.cleaned_data:
                     item_name = menu_form.cleaned_data.get('item_name')
                 else:
-                    logging.warning("Field 'item_name' not present in menu_form. Dumping menu_form:")
+                    logging.warning("Field 'item_name' not present in menu_form. Dumping menu_form: %s" % (menu_form.cleaned_data))
 
                 if 'item_price' in menu_form.cleaned_data:
                     item_price = menu_form.cleaned_data.get('item_price')
