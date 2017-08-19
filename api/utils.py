@@ -16,7 +16,7 @@ def get_menu(truck_name):
         logging.error(e, exc_info=True)
 
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        sql = "SELECT * FROM " + truck_name
+        sql = 'SELECT * FROM "%s"' % (truck_name)
         logging.debug("Executing %s" % (sql))
         cursor.execute(sql)
         menu_dict = cursor.fetchall()
@@ -40,8 +40,8 @@ def submit_truck(truck_data):
         sql = 'INSERT INTO trucks (name, cuisine) VALUES ("%s", "%s")' % (truck_name, cuisine)
         logging.debug("Executing %s" % (sql))
         cursor.execute(sql)
-        sql = "CREATE TABLE %s (item varchar(30), price int(11))" % (truck_name)
-        logging.debug("Executing %s" % (sql))
+        sql = 'CREATE TABLE "%s" (item varchar(30), price int(11))' % (truck_name)
+        logging.debug("Executing %s % (sql))
         cursor.execute(sql)
         menu = truck_data['menu']
         for item in menu:
@@ -59,7 +59,7 @@ def get_trucks():
         logging.error(e, exc_info=True)
 
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        sql = "SELECT * FROM trucks"
+        sql = 'SELECT * FROM trucks'
         logging.debug("Executing %s" % (sql))
         cursor.execute(sql)
         truck_dict =  cursor.fetchall()

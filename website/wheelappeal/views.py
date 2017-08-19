@@ -72,7 +72,7 @@ def submit(request):
                 return HttpResponse('Successful Post')
             else:
                 logging.debug("Error in truck submission: %s" % (response))
-                return HttpResponse("ERROR!! " + response.text)
+                return HttpResponse("ERROR!! %s " % (response.text))
 
         else:
             # forms are not valid
