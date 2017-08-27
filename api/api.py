@@ -21,34 +21,34 @@ class TruckData(Resource):
     def get(self):
         try:
             logging.debug("Truck data request %s" % (request))
-            trucks = utils.get_full_truck_data(request.args.get('truck_id'))
-            logging.debug("Trucks request returning: %s" % (trucks))
-            return json.dumps(trucks)
+            truck_data = utils.get_full_truck_data(request.args.get('truck_id'))
+            logging.debug("Trucks request returning: %s" % (truck_data))
+            return truck_data
         except Exception as e:
             logging.error(e, exc_info=True)
             return "{}"
 
-class Menu(Resource):
-    def __init__(self):
-        return
-
-    def get(self):
-        # parse request arguments
-        # formatting: http://wheelappeal.co:5000/v1/menu?truckname=<truckname>
-        try:
-            logging.debug("Menu request: %s\nRequest arguments: %s" % (request, request.args))
-            truckname = request.args.get('truckname')
-            menu = utils.get_menu(truckname)
-            return json.dumps(menu)
-        except Exception as e:
-            logging.error(e, exc_info=True)
+# class Menu(Resource):
+#     def __init__(self):
+#         return
+#
+#     def get(self):
+#         # parse request arguments
+#         # formatting: http://wheelappeal.co:5000/v1/menu?truckname=<truckname>
+#         try:
+#             logging.debug("Menu request: %s\nRequest arguments: %s" % (request, request.args))
+#             truckname = request.args.get('truckname')
+#             menu = utils.get_menu(truckname)
+#             return json.dumps(menu)
+#         except Exception as e:
+#             logging.error(e, exc_info=True)
 
 class Submit(Resource):
     def post(self):
         request_json = request.get_json()
         if request_json != None:
             logging.debug("Submit request: %s" % (request_json))
-            utils.submit_truck(request_json)
+            utils.submit_new_truck(request_json)
         else:
             return 'Incorrect request formatting. Must be JSON.'
 

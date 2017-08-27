@@ -12,7 +12,7 @@ import logging
 import utils
 
 # set up logging
-logging.basicConfig(filename='/home/ec2-user/website.log',level=logging.DEBUG,format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+logging.basicConfig(filename='/home/ec2-user/website.log',level=logging.DEBUG,format='%(asctime)s %(ip)-8s %(name)-12s %(levelname)-8s %(message)s')
 
 def index(request):
     context = {}
@@ -50,7 +50,7 @@ def submit(request):
                     item_price = menu_form.cleaned_data.get('item_price')
 
                 if item_name and item_price:
-                    menu_items.append({'name':item_name, 'price':item_price})
+                    menu_items.append({'item_name':item_name, 'item_price':item_price})
                 else:
                     logging.debug("Missing menu fields for %s: %s, %s," % (truck_name, item_name, item_price))
                     return HttpResponse("It looks like you missed a field in the menu!")
